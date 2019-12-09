@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Weather</title>
+<!-- Don't forget to link to jQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<style>
+	input{
+		margin: 10px 0px;
+		padding: 5px;
+	}
+	#forecast{
+		/*This div should not appear until the weather is returned.*/
+		display:none; 
+	}
+	#forecast div{
+		width: 25vw;
+		border: 8px solid blue;
+		margin: 0 auto;
+		background: black;
+	}
+	img{
+		width:100%;
+	}
+</style>
+<script>
+	// var url = "https://api.nasa.gov/planetary/apod?api_key=jqczi4Unt6cKy8zijZw5mAKpGGWexKhF77JXJ5s2";
+	
+    function gettingJSON(){
+		console.log("Hi");
+		// $('#forecast').hide();
+		
+		// var city = $('input[name=""]'.val());
+		let units = "imperial"; 
+		// request.get(query); 
+		
+
+		// if ($("input[value=!Ann Arbor]")) {
+
+		// }
+		let city = document.querySelector('#location').value;
+		console.log(city); 
+
+		// if ($(city).value = "") {
+		// 	city = "Ann Arbor"; 
+		// }
+		// let city = "Ann Arbor"; 
+
+		if (!city) {
+			city = "Ann Arbor"
+		}
+
+		// if ($("input('#location')").val().is(!"Ann Arbor")) {
+		// 	city = ($("input('#location')").val()); 
+		// }
+
+		//let currenttemp = "";
+
+		// return(city, units)
+		// this isn't working, i know that i want to index into the returned paragraph in console but i dont know what that is called. 
+		if ($("input[value=imperial]:checked").is(":checked")) {
+			units = "imperial"; 
+		}
+
+		if ($("input[value=metric]:checked").is(":checked")) {
+			units = "metric"; 
+		}
+    	// Use the OpenWeather API to return:
+    	//  the current temperature 
+    	//  the high temperature for the day
+    	//  the low temperature for the day
+    	//  the icon for the current weather.
+		// $(document).ready(query, function(e){
+
+		// $("#getIt").click(function(e) {
+		let query = "http://api.openweathermap.org/data/2.5/weather?q="+city+"&units="+units+"&APPID="+"44535444079533328843e3c9e050c44f";
+
+			// $("#location").hide();
+			// console.log("button is working"); 
+		// let currenttemp = (json["main"]["temp"]); 
+		// console.log(currenttemp); 
+		// }); 
+
+		// window.addEventListener(
+        //     'click', query, function (e){
+		// 	console.log("I work"); 
+		// })
+        //     // console.log("hiiii"); 
+			// $("#getIt").click(query,function(e) {
+			// 	$("#location").hide();
+			// 	console.log("button is working"); 
+				
+			// }); 
+		// }); 
+    	// You will need to update this query with the city, weather format (Celsius or Fahrenheit) and your OpenWeatherMap ID
+    	 
+    	// Right now I have it set to Chicago.  The default should be Ann Abor/Fahreheit.
+		// let query = "http://api.openweathermap.org/data/2.5/weather?q="+city+"&units="+units+"&APPID="+"44535444079533328843e3c9e050c44f";
+		// AnnArbor&APPID=44535444079533328843e3c9e050c44f
+        console.log("Query is :" + query);
+
+        $.getJSON(query,function(json){
+			console.log(JSON.stringify(json));
+			
+			// $('#forecast').hide();
+			$("#forecast").css("display", "block"); 
+			console.log("gettemps"); 
+			
+			// currenttemp = (json["main"]["temp"]); 
+			// currenttemp = (json.query.main.temp); 
+			// console.log(currenttemp); 
+			var currenttemp = json["main"]["temp"]; 
+			console.log(currenttemp); 
+			var icon = json["weather"][0]["icon"]; 
+			console.log(icon); 
+			var templow = json["main"]["temp_min"]; 
+			console.log(templow); 
+			var temphigh = json["main"]["temp_max"]; 
+			console.log(temphigh); 
+			var loc = json["name"];
+			console.log(loc); 
+
+			
+			$("#temp").html(currenttemp); 
+			$("#loc").html(loc);
+			$("#low").html(templow); 
+			$("#high").html(temphigh); 
+	
+			$("#tempImg").attr("src", "https://openweathermap.org/img/wn/"+icon+".png")
+
+			// var query = {
+			// 	"currenttemp" : ["main"]["temp"]
+			// 	"city" : ""
+			// }
+    });
+
+		// $("#getIt").click(function() {
+		// 	$("#location").hide();
+		// 	console.log("button is working"); 
+			
+		// })
+    }
+    </script>
+</head>
+<body>
+	<!-- DO NOT CHANGE ANY CODE IN THE BODY OF THIS FILE. -->
+	<label for ="location">City:</label><input type = "text" id = "location"><br>
+	<input type = "radio" name = "temp" value = "imperial" id = "fahrenheit"> <label for = "fahrenheit">Fahrenheit</label><br>
+	<input type = "radio" name = "temp" value = "metric" id = "celcius"> <label for = "celcius">Celcius</label><br>
+
+	<button id = "getIt" onclick = "gettingJSON()">Get Weather</button>
+
+
+	<div id = "forecast">
+		<div>
+		<img id = "tempImg" src="" alt = "" title = "">
+		</div>
+		<p>The temperature in <span id = "loc"></span> is currently <span id = "temp"></span>.</p>
+		<p>The high today will be <span id = "high"></span> and the low will be <span id = "low"></span>.</p>
+		
+	</div>
+</body>
+</html>
